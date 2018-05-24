@@ -1541,6 +1541,41 @@ api.get('/download', function(req, res) {
     }
 });
 
+api.post('/destroy', function(req, res) {
+    console.log("destroy username = ", req.session.username);
+    if (!req.session.user) {
+        res.send(401);
+        return;
+    }
+    var id = req.body.params.id;
+    var password = md5(req.body.params.password);
+    var username = req.body.params.username;
+
+    db.getUser(username)
+    .then((user) => {
+        if (user && user.password === password && user.id === id) {
+            db.destroy(id).then(() => {}).catch((err) => {});
+
+            res.json({
+                retCode: 0,
+                msg:""
+            })
+        } else {
+            res.json({
+                retCode: 1,
+                msg:"您的密码可能不正确，禁止注销"
+            })
+        }
+    })
+    .catch((err) => {
+        res.json({
+            retCode: 2,
+            msg:"未知错误，请重试"
+        })
+    });
+
+});
+
 function md5(str) {
     return crypto.createHash('md5').update(str).digest('hex');
 };

@@ -1165,4 +1165,33 @@ db.updateNote = function(id, content, tag_id) {
     });
 }
 
+db.destroy = function(user_id) {
+    var delNote = "DELETE FROM `notes` WHERE (`user_id`='"+ user_id+"')";
+    var delAadvice = "DELETE FROM `advices` WHERE (`user_id`='"+ user_id+"')";
+    var delBookmark = "DELETE FROM `bookmarks` WHERE (`user_id`='"+ user_id+"')";
+    var getTags = "SELECT * FROM `tags` WHERE `user_id` = '" + user_id;
+    var delTag = "DELETE FROM `tags` WHERE (`user_id`='"+ user_id+"')";
+    var delUser = "DELETE FROM `users` WHERE (`id`='"+ user_id +"')";
+
+    console.log("destroy: ", user_id)
+    client.query(delNote, (err, result) => { err && console.log(err); });
+    client.query(delAadvice, (err, result) => { err && console.log(err); });
+    client.query(delBookmark, (err, result) => { err && console.log(err); });
+
+    return new Promise(function(resolve, reject) {
+        client.query(getTags, (err, tags) => {
+            if (err) {
+                reject(err);
+            } else {
+                var delTagBookmark = "DELETE FROM `tags_bookmarks` WHERE tag_id IN (" + (tags.toString() || ("-1")) + ")";
+                client.query(delTag, (err, result) => { err && console.log(err); });
+                client.query(delTagBookmark, (err, result) => { err && console.log(err); });
+                client.query(delUser, (err, result) => { err && console.log(err); });
+                
+                resolve(0);
+            }
+        });
+    });
+}
+
 module.exports = db;

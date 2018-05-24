@@ -470,6 +470,20 @@ app.factory('bookmarkService', ['$http', '$q', function($http, $q) {
                 });
             return def.promise;
         },
+        destroy: function(params) {
+            var def = $q.defer();
+            $http.post('/api/destroy/', {
+                    params: params
+                })
+                .success(function(data) {
+                    def.resolve(data);
+                })
+                .error(function(data) {
+                    def.reject('destroy error');
+                });
+            return def.promise;
+        },
+        
     };
 
     return service;

@@ -12,8 +12,6 @@ app.controller('loginCtr', ['$scope', '$filter', '$state', '$cookieStore', '$win
 
     $scope.username = $cookieStore.get("username") || "";
     $scope.password = "";
-    $scope.showErr = false;
-    $scope.errInfo = '';
 
     $scope.emailRegister = "";
     $scope.usernameRegister = "";
@@ -23,11 +21,8 @@ app.controller('loginCtr', ['$scope', '$filter', '$state', '$cookieStore', '$win
     $scope.login = function() {
         var autoLogin = $('.ui.checkbox.js-auto-login').checkbox('is checked');
         if (!$scope.username || !$scope.password) {
-            $scope.showErr = true;
-            $scope.errInfo = '用户名或者密码不能为空！';
+            toastr.error('用户名或者密码不能为空！', "错误");
         } else {
-            $scope.showErr = false;
-            $scope.errInfo = '';
             console.log($scope.username, $scope.password, autoLogin);
             var params = {
                 username: $scope.username,

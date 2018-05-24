@@ -6,7 +6,7 @@ app.controller('settingsCtr', ['$scope', '$stateParams', '$filter', '$state', '$
     }
 
     $scope.forbidQuickKey = dataService.forbidQuickKey
-    $scope.form = [false, false, false, false, false, false, false];
+    $scope.form = [false, false, false, false, false, false, false, false];
     $scope.passwordOrgin = "";
     $scope.passwordNew1 = "";
     $scope.passwordNew2 = "";
@@ -102,7 +102,7 @@ app.controller('settingsCtr', ['$scope', '$stateParams', '$filter', '$state', '$
                 passwordNew: $scope.passwordNew1,
                 passwordOrgin: $scope.passwordOrgin,
             };
-
+            $scope.passwordNew1 = $scope.passwordNew1 = $scope.passwordOrgin = "";
             bookmarkService.resetPassword(parmes)
                 .then((data) => {
                     if (data.retCode == 0) {
@@ -211,9 +211,36 @@ app.controller('settingsCtr', ['$scope', '$stateParams', '$filter', '$state', '$
     $scope.exportBookmark = function() {
         var userId = $scope.user && $scope.user.id;
         if (userId) {
-            // toastr.warning('功能正在开发中，敬请期待......', '提示');
-            // return;
             $window.open("api/download?userId=" + userId + "&type=exportbookmark");
+        } else {
+            toastr.warning('用户信息无法获取到，请尝试按刷新网页再尝试！', '提示');
+        }
+    }
+
+    $scope.destroy = function() {
+        var userId = $scope.user && $scope.user.id;
+        if (userId) {
+            var parmes = {
+                id: userId,
+                username: $scope.user.username,
+                password: $scope.passwordOrgin,
+            };
+            toastr.success('正在注销中，请等待......', "提示");
+            bookmarkService.destroy(parmes)
+                .then((data) => {
+                    if (data.retCode == 0) {
+                        toastr.success('账号注销成功！感谢您的使用！', "提示");
+                        pubSubService.publish('Common.menuActive', {
+                            login: false,
+                            index: dataService.NotLoginIndexHome
+                        });
+                    } else {
+                        toastr.error('账号注销失败，请重试！消息：' + data.msg, "错误");
+                    }
+                })
+                .catch((err) => {
+                    toastr.error('账号注销失败。错误信息：' + JSON.stringify(err) + "，请重试！", "错误");
+                });
         } else {
             toastr.warning('用户信息无法获取到，请尝试按刷新网页再尝试！', '提示');
         }

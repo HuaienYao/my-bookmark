@@ -1,9 +1,4 @@
-<form class="ui form segment js-form-login" ng-class={error:showErr}>
-    <div class="ui error message">
-        <div class="header">错误提示</div>
-        <p>
-            {{ errInfo }}</p>
-    </div>
+<form class="ui form segment js-form-login">
     <div class="required field">
         <label>用户名</label>
         <div class="ui icon input">
@@ -32,6 +27,8 @@
             </div>
         </span>
     </div>
+    <div class="ui divider"></div>
+    <p style="color: red">友情提示：对于注册一年内未登陆使用的，系统会自动注销账号以及清理所有数据！</p>
     <div class="ui divider"></div>
     <img class="ui centered fluid image" src="./images/screenshot.gif">
 </form>

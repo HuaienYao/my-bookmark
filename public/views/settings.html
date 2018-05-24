@@ -16,6 +16,8 @@
                 </a>
                 <a class="item" ng-class="{active:form[6]}" ng-click="changeForm(6)">请喝咖啡
                 </a>
+                <a class="item" ng-class="{active:form[7]}" ng-click="changeForm(7)">账号注销
+                </a>
             </div>
         </div>
         <div class="twelve wide stretched column">
@@ -254,6 +256,16 @@
                     </tbody>
                 </table>
             </div>
+            <form class="ui form" ng-show="form[7]">
+                <h4 class="ui horizontal divider header" style="color: red">
+                    账号注销将删除您在系统中所有资料！请谨慎操作！
+                </h4>
+                <div class="required field">
+                    <label>密码</label>
+                    <input type="password" placeholder="" ng-model="passwordOrgin">
+                </div>
+                <button class="ui button" type="submit" ng-click="destroy()">确认注销</button>
+            </form>
         </div>
     </div>
 </div>
